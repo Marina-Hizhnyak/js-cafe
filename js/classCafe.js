@@ -35,8 +35,14 @@ class Cafe {
     };
     getOrder(tableNum, dishId, quantity) {
         const curTable = this.findTable(tableNum);
-        curTable.currentOrder = { dishId: quantity}
-        console.log(curTable);
+        if (!curTable.currentOrder) { 
+            curTable.currentOrder = {};
+        }
+        if (curTable.currentOrder[dishId]) { 
+            return curTable.currentOrder[dishId]+=quantity;
+        }
+        curTable.currentOrder = {...curTable.currentOrder, [dishId]: quantity}
+        // console.log(curTable);
     };
 
     findTable(tableNum) {
@@ -46,6 +52,23 @@ class Cafe {
             }
         }
     }
+        addDish (tableNum, dishId) {
+        const curTable = this.findTable(tableNum);
+        if (!curTable.currentOrder) { 
+            curTable.currentOrder = {};
+        }
+            if (curTable.currentOrder[dishId]) { 
+            return curTable.currentOrder[dishId]+=1;
+        }
+        curTable.currentOrder = {...curTable.currentOrder, [dishId]: 1}
+        console.log(curTable);
+        }
+     removeDish (tableNum, dishId) {
+        const curTable = this.findTable(tableNum);
+        if (!curTable.currentOrder||!curTable.currentOrder[dishId]) return;
+         curTable.currentOrder[dishId] -= 1;
+        console.log(curTable);
+    };
 }
 const cafeArgs = { menu, tables, workers,};
 const cafe = new Cafe(cafeArgs);
@@ -54,7 +77,12 @@ console.log(cafe);
 cafe.getPresentWorkers();
 cafe.checkTables();
 cafe.findTable();
-cafe.getOrder();
+cafe.getOrder(1, "late", 1);
+cafe.getOrder(1, "napoleon", 2);
+cafe.addDish(1, "zavarnoe", 1);
+cafe.addDish(1, "zavarnoe", 1);
+cafe.removeDish(1, "zavarnoe", 1);
+cafe.removeDish(1,"zavarnoe",1);
 console.log(cafe);
 
 console.log(cafe.presentWorkers);
